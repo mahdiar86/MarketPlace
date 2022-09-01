@@ -1,0 +1,95 @@
+﻿@using MarketPlace.Application.Extensions
+@using MarketPlace.Application.Utils
+@model MarketPlace.Data.DTOs.Contacts.FilterTicketDTO
+@{
+    ViewData["Title"] = "آخرین تیکت ها";
+}
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("UserSidebar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        @ViewData["Title"]
+                    </div>
+                    <section class="shadow-around p-3">
+                        <div class="table-responsive">
+                            @if (Model.Tickets != null && Model.Tickets.Any())
+                            {
+                                <table class="table">
+                                    <thead>
+                                        <tr class="ticket-header">
+                                            <th>شناسه تیکت</th>
+                                            <th>عنوان تیکت</th>
+                                            <th>تاریخ آخرین بروزرسانی</th>
+                                            <th>وضعیت</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var ticket in Model.Tickets)
+                                    {
+                                        <tr>
+                                            <td>@ticket.Id</td>
+                                            <td>@ticket.Title</td>
+                                            <td>@ticket.LastUpdateDate.ToShamsi()</td>
+                                            <td><span class="custom-lable">@ticket.TicketState.GetEnumName()</span></td>
+                                            <td class="order-detail-link">
+                                                <a asp-area="User" asp-controller="Ticket" asp-action="TicketDetail" asp-route-id="@ticket.Id">
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="alert cutome-alert">تیکتی وجود ندارد </div>
+                            }
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-01.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-02.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-03.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-04.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

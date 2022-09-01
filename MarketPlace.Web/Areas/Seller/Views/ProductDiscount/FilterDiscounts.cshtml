@@ -1,0 +1,82 @@
+﻿@model MarketPlace.Data.DTOs.Discount.FilterProductDiscountDTO
+@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@{
+    ViewData["Title"] = "مدیریت کدهای تخفیف";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+ <div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("SellerSideBar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="col-12">
+                <div class="section-title mb-2">
+                    @ViewData["Title"]
+                </div>
+                <form method="get" asp-area="Seller" asp-controller="ProductDiscount" asp-action="FilterDiscounts" id="filter-form">
+                    <input type="hidden" asp-for="PageId" />
+                    <section class="shadow-around p-3">
+                        <a class="btn btn-add-product" asp-area="Seller" asp-controller="ProductDiscount" asp-action="CreateDiscount">افزودن تخفیف جدید</a>
+                        <div class="table-responsive">
+                            @if (Model.ProductDiscounts != null && Model.ProductDiscounts.Any())
+                            {
+                                <table class="table">
+                                    <thead>
+                                        <tr class="product-header">
+                                            <th>شناسه</th>
+                                            <th>درصد</th>
+                                            <th>تعداد تخفیف</th>
+                                            <th>تاریخ انقضا</th>
+                                            <th>دستورات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var discount in Model.ProductDiscounts)
+                                        {
+                                            <tr>
+                                                <td>@discount.Id</td>
+                                                <td>@discount.Percentage  %</td>
+                                                <td>@discount.DiscountNumber</td>
+                                                <td>@discount.ExpireDate.ToShamsi()</td>
+                                                <td>
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />
+                                @*<div class="pagination">
+                                    @if (Model.StartPage < Model.PageId)
+                                    {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@((Model.PageId-1))" class="prev"><i class="far fa-arrow-from-left"></i></a>
+
+                                    }
+                                    @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                                    {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@(i)" class="@(Model.PageId == i ? "current" : "") custom-pointer">@i</a>
+                                    }
+                                    @if (Model.EndPage > Model.PageId)
+                                    {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@((Model.PageId+1))" class="next"><i class="far fa-arrow-to-left"></i></a>
+                                    }
+                                    </div>*@
+                            }
+                            else
+                            {
+                                <div class="alert cutome-alert">کدتخفیفی برای نمایش وجود ندارد !</div>
+                            }
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

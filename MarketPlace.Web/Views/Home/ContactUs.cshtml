@@ -1,0 +1,94 @@
+﻿@model MarketPlace.Data.DTOs.Contacts.CreateContactUsDTO
+@{
+    ViewData["Title"] = "تماس با ما";
+}
+@section Script {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <partial name="_CaptchaScripts" />
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="section-title mb-2">
+                @ViewData["Title"]
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="shadow-around p-3 mb-5">
+                <form method="post" asp-action="ContactUs">
+                    <partial name="_CaptchaInput" />
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <p class="text-muted text-sm">
+                                برای پیگیری یا سوال درباره سفارش و ارسال پیام بهتر است
+                                از فرم زیر استفاده کنید.
+                            </p>
+                        </div>
+
+                        @*<div class="col-md-6">
+                                <div class="form-element-row">
+                                    <label class="label-element">موضوع*</label>
+                                    <select name="" id="" class="select2 select2-hidden-accessible" data-select2-id="select2-data-1-onoh" tabindex="-1" aria-hidden="true">
+                                        <option value="0" data-select2-id="select2-data-3-bewe">--انتخاب موضوع--</option>
+                                        <option value="1">پیشنهاد</option>
+                                        <option value="2">انتقاد یا شکایات</option>
+                                        <option value="3">پیگیری سفارش</option>
+                                        <option value="4">خدمات پس از فروش</option>
+                                        <option value="5">مدیریت</option>
+                                        <option value="6">سایر موضوعات</option>
+                                    </select>
+                                    <span class="select2 select2-container select2-container--default" dir="rtl" data-select2-id="select2-data-2-sp3a" style="width: 143px;">
+                                    <span class="selection">
+                                    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2--container">
+                                    <span class="select2-selection__rendered" id="select2--container" role="textbox" aria-readonly="true" title="--انتخاب موضوع--">--انتخاب موضوع--</span>
+                                    <span class="select2-selection__arrow" role="presentation">
+                                    <b role="presentation"></b></span></span></span>
+                                    <span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                            </div>*@
+
+                        <div class="col-md-6">
+                            <div class="form-element-row">
+                                <label class="label-element">نام و نام خانوادگی*</label>
+                                <input asp-for="FullName" type="text" class="input-element">
+                                <span class="text-warning" asp-validation-for="FullName"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-element-row">
+                                <label class="label-element">ایمیل*</label>
+                                <input asp-for="Email" class="input-element dir-ltr">
+                                <span class="text-warning" asp-validation-for="Email"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-element-row">
+                                <label class="label-element">تلفن تماس*</label>
+                                <input asp-for="MobileNumber" class="input-element dir-ltr">
+                                <span class="text-warning" asp-validation-for="MobileNumber"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-element-row">
+                                <label class="label-element">پیام*</label>
+                                <textarea asp-for="Text" cols="30" rows="10" class="input-element"></textarea>
+                                <span class="text-warning" asp-validation-for="Text"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-element-row text-left">
+                                <button class="btn-element btn-info-element">
+                                    ثبت و ارسال
+                                    <i class="fad fa-money-check-edit mr-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

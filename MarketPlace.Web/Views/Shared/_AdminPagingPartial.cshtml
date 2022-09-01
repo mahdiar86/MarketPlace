@@ -1,0 +1,25 @@
+﻿@model MarketPlace.Data.DTOs.Paging.BasePaging
+
+<ul class="pagination">
+
+    @if (Model.StartPage < Model.PageId)
+    {
+        <li class="paginate_button page-item previous" id="DataTables_Table_0_previous">
+            <a onclick="FillPageId(@(Model.PageId - 1))" class="page-link cursor-pointer">قبلی</a>
+        </li>
+    }
+
+    @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+    {
+        <li class="paginate_button cursor-pointer page-item @(Model.PageId == i?"active":"")">
+            <a onclick="FillPageId(@i)" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@i</a>
+        </li>
+    }
+
+    @if (Model.EndPage > Model.PageId)
+    {
+        <li class="paginate_button cursor-pointer page-item next">
+            <a onclick="FillPageId(@(Model.PageId + 1))" class="page-link">بعدی</a>
+        </li>
+    }
+</ul>

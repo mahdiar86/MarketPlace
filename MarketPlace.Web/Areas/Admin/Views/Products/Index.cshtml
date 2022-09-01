@@ -1,0 +1,187 @@
+﻿@using MarketPlace.Data.DTOs.Products
+@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@model MarketPlace.Data.DTOs.Products.FilterProductDTO
+@{
+    ViewData["Title"] = "لیست محصولات";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    @ViewData["Title"]
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <form id="filter-form" asp-area="Admin" asp-controller="Products" asp-action="Index" method="get">
+                    <input type="hidden" asp-for="PageId" />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-lg-9 col-md-4 col-sm-4 col-xs-6">
+                                <div class="form-group">
+                                    <div class="input-field col s6">
+                                        <input type="text" class="form-control" asp-for="ProductTitle" />
+                                        <label for="ProductTitle">نام محصول مورد نظر</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @foreach (var item in Html.GetEnumSelectList<FilterProductState>())
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                                <div class="form-check form-check-radio">
+                                    <label>
+                                        <input type="radio" value="@item.Value" name="@(nameof(Model.FilterProductState))" @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.FilterProductState) ? "checked" : "")>
+                                        <span>@item.Text</span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-0">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <button type="submit" class="btn btn-block bg-pink waves-effect">
+                                        جستجو
+                                        <div class="waves-ripple " data-hold="1627107897335" data-scale="scale(12)" data-x="43.28125" data-y="25" style="top: 25px; left: 43.28125px; -webkit-transform: scale(12); -moz-transform: scale(12); -ms-transform: scale(12); -o-transform: scale(12); transform: scale(12); opacity: 1; -webkit-transition-duration: 750ms; -moz-transition-duration: 750ms; -o-transition-duration: 750ms; transition-duration: 750ms; -webkit-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); -moz-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); -o-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-0">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <a class="btn btn-block bg-purple waves-effect" asp-area="Admin" asp-controller="Products" asp-action="Index">
+                                        پاک کردن فیلتر ها
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                @if (Model.Products != null && Model.Products.Any())
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>نام محصول</th>
+                                <th>قیمت</th>
+                                <th>فعال / غیرفعال</th>
+                                <th>وضعیت</th>
+                                <th>دستورات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.Products)
+                            {
+                                <tr>
+                                    <td><img class="img-thumbnail" width="200" src="/Content/Products/Thumb/@product.ImageName" /></td>
+                                    <td>@product.Title</td>
+                                    <td>@product.Price.ToString("#,0") تومان</td>
+                                    <td>@(product.IsActive?"فعال":"غیرفعال")</td>
+                                    <td><span class="label l-bg-purple shadow-style" data-status="@product.Id">@product.ProductAcceptanceState.GetEnumName()</span></td>
+                                    <td>
+                                        <div class="row pb-2">
+                                            <a onclick="acceptSellerProduct(@product.Id)" class="btn">تایید محصول</a>
+                                        </div>
+                                        <div class="row">
+                                            <a data-toggle="modal" data-target="#basicModal" onclick="rejectClick(@product.Id)" class="btn btn-info">رد کردن محصول</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert bg-teal alert-dismissible rounded" role="alert">
+                        اطلاعاتی یافت نشد !
+                    </div>
+                }
+            </div>
+            <div class="row" style="align-items: center">
+
+                <div class="col-sm-12 col-md-5">
+               @*     <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 تا 10 از 57 ورودی</div>*@
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                        <partial name="_AdminPagingPartial" model="Model.GetCurrentPaging()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">حذف محصول</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ModalProductId" />
+                <div class="input-field col s12">
+                    <textarea type="text" class="materialize-textarea" maxlength="300" rows="4" id="ModalWhyIsReject" name="ModalWhyIsReject"></textarea>
+                    <label for="ModalWhyIsReject">دلیل عدم تایید محصول</label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect" onclick="rejectSellerProduct()">ذخیره</button>
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        function acceptSellerProduct(id) {
+            $.get("/Admin/Products/AcceptSellerProduct/" + id).then(res => {
+                if (res.status = 'success') {
+                    $('[data-status="' + id + '"]').text('تایید شده');
+                    M.toast({ html: 'محصول مورد نظر با موفقیت تایید شد', classes: 'admin-toast', displayLength: 3500 });
+                }
+            });
+        }
+
+        function rejectSellerProduct() {
+            var productId = $("#ModalProductId").val();
+            var whyIsReject = $("#ModalWhyIsReject").val();
+
+            $.ajax({
+                url: "/Admin/Products/RejectSellerProduct/",
+                type: "get", //send it through get method
+                data: {
+                    ProductId: productId,
+                    WhyIsReject: whyIsReject
+                },
+                success: function (response) {
+                    M.toast({ html: 'محصول مورد نظر رد شد', classes: 'bg-danger text-white', displayLength: 3500 });
+                    $('#basicModal').modal('hide');
+                    $("#ModalWhyIsReject").val('');
+                    $('[data-status="' + productId + '"]').text('رد شده');
+                },
+                error: function (xhr) {
+                    M.toast({ html: 'خطا', classes: 'bg-danger text-white', displayLength: 3500 });
+                }
+            });
+        }
+
+        function rejectClick(id) {
+            $("#ModalProductId").val(id);
+        }
+    </script>
+}

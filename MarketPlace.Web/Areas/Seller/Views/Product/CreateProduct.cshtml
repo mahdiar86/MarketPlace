@@ -1,0 +1,285 @@
+﻿@model MarketPlace.Data.DTOs.Products.CreateProductDTO
+@using MarketPlace.Application.Utils
+@using MarketPlace.Data.Entities.Products
+
+@{
+    ViewData["Title"] = "افزودن محصول";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<ProductCategory> mainCategories = (List<ProductCategory>)ViewBag.mainCategories;
+}
+
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            @await Component.InvokeAsync("SellerSideBar")
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        <h3>@ViewData["Title"]</h3>
+                    </div>
+                    <section class="shadow-around p-3">
+                        <form method="post" id="create_product_form" asp-area="Seller" asp-controller="Product" asp-action="CreateProduct" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-8 mb-5">
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">عنوان محصول</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <input asp-for="Title" class="input-element">
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">قیمت</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <input asp-for="Price" type="number" class="input-element">
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">درصد پورسانت سایت</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <input asp-for="SiteProfit" type="number" class="input-element">
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="SiteProfit" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">درصد تخفیف (درصورت نداشتن تخفیف صفر وارد کنید)</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <input asp-for="DiscountPercent" type="number" class="input-element">
+                                            </div>
+                                        </div>
+                                        <span class="text-danger" asp-validation-for="DiscountPercent"></span>
+                                    </div>
+
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">تعداد موجودی</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <input asp-for="QuantityInShop" type="number" class="input-element">
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="QuantityInShop" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-lg-12 mb-1 align-self-end">
+                                        <div>
+                                            <label class="container-checkbox">
+                                                فعال / غیر فعال
+                                                <input name="@nameof(Model.IsActive)" value="true" type="checkbox">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">توضیحات کوتاه</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <textarea rows="5" asp-for="ShortDescription" class="input-element"></textarea>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-center mb-3">
+                                        <h5>تصویر اصلی محصول</h5>
+                                        <hr />
+                                    </div>
+                                    <div class="col-lg-12 mb-4">
+                                        <div class="col-md-12">
+                                            <img src="/images/noimage.png" id="productImage" class="thumbnail" style="width: 100%" />
+                                        </div>
+                                        <div class="col-md-12 mb-5">
+                                            <input id="productImageFileUpload" type="file" name="productImage" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 mb-5 align-self-end">
+                                        <div class="text-center mb-3">
+                                            <h5>دسته بندی ها</h5>
+                                            <hr />
+                                        </div>
+                                        @foreach (var category in mainCategories.Where(c => c.ParentId == null))
+                                        {
+                                            <div>
+                                                <label class="container-checkbox">
+                                                    @category.Title
+                                                    <input name="@nameof(Model.SelectedCategories)" category_checkbox="@category.Id" value="@category.Id" type="checkbox">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                @if (mainCategories.Any(c => c.Id == category.Id))
+                                                {
+                                                    <div sub_categories="@category.Id" id="sub_categories_@(category.Id)" style="display: none">
+                                                        @foreach (var subCategory in mainCategories.Where(s => s.ParentId == category.Id))
+                                                        {
+                                                            <div class="mr-4">
+                                                                <label class="container-checkbox">
+                                                                    @subCategory.Title
+                                                                    <input category_checkbox="@subCategory.Id" parent-category-id="@category.Id" name="@nameof(Model.SelectedCategories)" value="@subCategory.Id" type="checkbox">
+                                                                    <span class="checkmark"></span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-2" sub_categories="@subCategory.Id" id="sub_categories_@(subCategory.Id)" style="display: none">
+                                                                @foreach (var secondSubCategory in mainCategories.Where(s => s.ParentId == subCategory.Id))
+                                                                {
+                                                                    <div class="mr-4">
+                                                                        <label class="container-checkbox">
+                                                                            @secondSubCategory.Title
+                                                                            <input parent-category-id="@subCategory.Id" name="@nameof(Model.SelectedCategories)" value="@secondSubCategory.Id" type="checkbox">
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-5">
+                                    <div class="col-lg-12 mb-5">
+                                        <div class="text-sm text-muted mb-3">توضیحات</div>
+                                        <div class="text-dark font-weight-bold">
+                                            <div class="form-element-row mb-0">
+                                                <textarea rows="10" ckeditor="8" asp-for="Description" class="input-element"></textarea>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-element-row text-right">
+                                            <button class="btn-element btn-info-element">
+                                                <i class="fas fa-shopping-basket"></i>
+                                                افزودن محصول جدید
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        @*<div class="col-lg-12 mb-5" style="border: 0.5px solid #222; padding: 5px;">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="text-sm text-muted mb-2">عنوان ویژگی</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input placeholder="لطفا عنوان ويژگی را وارد کنید" type="text" id="product_feature_input" type="number" class="input-element">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="text-sm text-muted mb-2">مقدار ویژگی</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input placeholder="لطفا مقدار ويژگی را وارد کنید" id="product_feature_value" type="text" class="input-element">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 add-color">
+                                    <button class="btn-element btn-info-element btn-add-color" onclick="addProductColorToList()">
+                                        افزودن ویژگی
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table class="table" id="product_features_list">
+                                    <thead>
+                                        <tr class="ticket-header">
+                                            <th>عنوان ویژگی</th>
+                                            <th>مقدار ويژگی</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>*@
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#productImage').attr('src', e.target.result);
+                    $("#productImage").addClass("img-thumbnail");
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#productImageFileUpload").change(function () {
+            readURL(this);
+        });
+
+        function addProductColorToList() {
+            var featureTitle = $("#product_feature_input").val();
+            var featureValue = $("#product_feature_value").val();
+
+            if (featureTitle != '' && featureValue != '') {
+                var currentFeaturesCount = $("#product_features_list tr");
+                var index = currentFeaturesCount.length;
+
+                var featureTitleNode = `<input type="hidden" value="${featureTitle}" id="ProductFeatures[${index}].FeatureTitle" name="ProductFeatures[${index}].FeatureTitle" feature-title-hidden-input="${featureTitle}-${featureValue}">`;
+                var featureValueNode = `<input type="hidden" value="${featureValue}" id="ProductFeatures[${index}].FeatureValue"  name="ProductFeatures[${index}].FeatureValue"  feature-value-hidden-input="${featureTitle}-${featureValue}" />`;
+
+                var colorTableNode = `<tr feature-table-item="${featureTitle}-${featureValue}"><td>${featureTitle}</td><td>${featureValue}</td> <td> <button onclick="removeProductFeature('${featureTitle}-${featureValue}')" class="btn-element btn-info-element btn-sm">حذف</button> </td></tr>`;
+
+                $("#create_product_form").append(featureTitleNode);
+                $("#create_product_form").append(featureValueNode);
+
+                $("#product_features_list").append(colorTableNode);
+
+
+                $("#product_feature_input").val('');
+                $("#product_feature_value").val('');
+            } else {
+                toast('لطفا عنوان و مقدار ویژگی را به درستی وارد کنید', 'error', 'error');
+            }
+        }
+
+
+        function removeProductFeature(index) {
+            $('[feature-title-hidden-input="' + index + '"]').remove();
+            $('[feature-value-hidden-input="' + index + '"]').remove();
+            $('[feature-table-item="' + index + '"]').remove();
+        }
+    </script>
+
+}
+
+

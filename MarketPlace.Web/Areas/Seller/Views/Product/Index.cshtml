@@ -1,0 +1,145 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@using MarketPlace.Data.Entities.Products
+@model MarketPlace.Data.DTOs.Products.FilterProductDTO
+@{
+    ViewData["Title"] = "لیست محصولات";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("SellerSideBar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="col-12">
+                <div class="section-title mb-2">
+                    @ViewData["Title"]
+                </div>
+                <section class="shadow-around p-3">
+                    <a class="btn btn-add-product" asp-area="Seller" asp-controller="Product" asp-action="CreateProduct">افزودن محصول جدید</a>
+                    <div class="table-responsive">
+                        @if (Model.Products != null && Model.Products.Any())
+                        {
+                            <table class="table">
+                                <thead>
+                                    <tr class="product-header">
+                                        <th>تصویر</th>
+                                        <th>شناسه</th>
+                                        <th>نام </th>
+                                        <th>قیمت</th>
+                                        <th> بروزرسانی</th>
+                                        <th>وضعیت</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img width="120" src="@(@FilePath.ProductImageThumb + product.ImageName)" class="thumb" />
+                                            </td>
+                                            <td><p>@product.Id</p></td>
+                                            <td>
+                                                @(product.Title.Length > 27?product.Title.Substring(0,30) + " ... ": product.Title)
+                                                @if (product.ProductAcceptanceState == ProductAcceptanceState.Rejected)
+                                                {
+                                                    <div class="pt-3">
+                                                        <hr />
+                                                        <p class="text-danger">علت عدم تایید :‌ @product.ProductAcceptOrRejectDescription</p>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (product.DiscountPercent == 0 || product.DiscountPercent == null)
+                                                {
+                                                    <p>
+                                                        @product.Price.ToString("#,0") تومان
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-discount">@product.Price</p>
+                                                    <p>@((product.Price * product.DiscountPercent / 100).ToString("#,0")) تومان</p>
+                                                }
+                                            </td>
+                                            <td>@product.LastUpdateDate.ToShamsi()</td>
+                                            <td>
+                                                <span class="custom-lable">@product.ProductAcceptanceState.GetEnumName()</span>
+                                            </td>
+                                            <td class="order-detail-link" style="display: flex; flex-direction: column;">
+                                                <a class="btn-link cursor-pointer" data-toggle="modal" data-target="#exampleModal" id="@product.Id" onclick="setProductIdToModal(@product.Id)">
+                                                    حذف
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                                <a asp-area="Seller" asp-controller="Product" asp-action="AddProductFeature" asp-route-productId="@product.Id">
+                                                    ويژگی
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                                <a asp-area="Seller" asp-controller="Product" asp-action="GetProductGalleries" asp-route-productId="@product.Id">
+                                                    گالری تصاویر
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                                <a asp-area="Seller" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@product.Id">
+                                                    ویرایش
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            @*<partial name="_PagingPartial" model="@Model.GetCurrentPaging()" />*@
+                            <div class="pagination">
+                                @if (Model.StartPage < Model.PageId)
+                                {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@((Model.PageId-1))" class="prev"><i class="far fa-arrow-from-left"></i></a>
+
+                                }
+                                @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                                {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@(i)" class="@(Model.PageId == i ? "current" : "") custom-pointer">@i</a>
+                                }
+                                @if (Model.EndPage > Model.PageId)
+                                {
+                                    <a asp-area="Seller" asp-controller="Product" asp-action="Index" asp-route-PageId="@((Model.PageId+1))" class="next"><i class="far fa-arrow-to-left"></i></a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert cutome-alert">محصولی برای نمایش وجود ندارد !</div>
+                        }
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <input type="hidden" id="modalProductId" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    حذف محصول
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                آیا از حذف این محصول اطمینان دارید ؟
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-primary" onclick="deleteProduct()">حذف محصول</button>
+            </div>
+        </div>
+    </div>
+</div>

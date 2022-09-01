@@ -1,0 +1,121 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Data.Entities.Products
+@model MarketPlace.Data.DTOs.Products.CreateProductFeatureDTO
+@{
+    Product product = (Product)ViewBag.product;
+    ViewData["Title"] = "مدیریت ویژگی های " + product.Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            @await Component.InvokeAsync("SellerSideBar")
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        <h3>@ViewData["Title"]</h3>
+                    </div>
+                    <section class="shadow-around p-3">
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12 mb-5">
+                                <input type="hidden" asp-for="ProductId" id="productId" value="@product.Id" />
+                                <div class="col-lg-12 mb-5">
+                                    <div class="text-sm text-muted mb-3">عنوان ویژگی</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input class="input-element" asp-for="FeatureTitle" id="title" placeholder="عنوان ویژگی" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-5">
+                                    <div class="text-sm text-muted mb-3">مقدار ویژگی</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input class="input-element" asp-for="FeatureValue" id="value" placeholder="مقدار ویژگی" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-12 mb-5">
+                                <img src="@(FilePath.ProductImageThumb+product.ImageName)" class="thumbnail rounded" />
+                            </div>
+                            <div class="col-lg-12 mb-5">
+                                <div class="col-12">
+                                    <div class="form-element-row text-right">
+                                        <button class="btn-element btn-info-element" onclick="send()">
+                                            <i class="fas fa-shopping-basket"></i>
+                                            افزودن ویژگی جدید
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table class="table" id="product_features_list">
+                                    <thead>
+                                        <tr class="ticket-header">
+                                            <th>عنوان ویژگی</th>
+                                            <th>مقدار ويژگی</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var feature in product.ProductFeatures)
+                                    {
+                                        <tr>
+                                            <td>@feature.FeatureTitle</td>
+                                            <td>@feature.FeatureValue</td>
+                                            <td>
+                                                <a href="/Seller/DeleteProductFeature/@feature.Id" class="btn-element btn-info-element btn-sm">حذف</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script
+{
+    <script src="~/js/jquery-3.5.1.min.js"></script>
+    <script>
+
+        function send() {
+            var productId = $("#productId").val();
+            var title = $("#title").val();
+            var value = $("#value").val();
+            var productFeatureList = $("#product_features_list");
+
+            $.ajax({
+                url: "/Seller/AddProductFeature/",
+                type: "post", //send it through get method
+                data: {
+                    FeatureTitle: title,
+                    FeatureValue: value,
+                    ProductId: productId
+                },
+                success: function (response) {
+                    var title = $("#title").val('');
+                    var value = $("#value").val('');
+                    toast("ویژگی مورد نظر با موفقیت اضافه شد !", "success");
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+
+    </script>
+}

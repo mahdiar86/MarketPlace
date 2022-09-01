@@ -1,0 +1,35 @@
+﻿@if (TempData["SuccessMessage"] != null ||
+TempData["ErrorMessage"] != null ||
+TempData["WarningMessage"] != null ||
+TempData["InfoMessage"] != null
+)
+{
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            toast('@TempData["SuccessMessage"]' ,'success');
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            toast('@TempData["ErrorMessage"]', 'error');
+        </script>
+    }
+
+    @if (TempData["WarningMessage"] != null)
+    {
+        <script>
+            toast('@TempData["WarningMessage"]', 'warning');
+        </script>
+    }
+
+    @if (TempData["InfoMessage"] != null)
+    {
+        <script>
+            toast('@TempData["InfoMessage"]', 'info');
+        </script>
+    }
+}

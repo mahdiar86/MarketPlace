@@ -1,0 +1,129 @@
+﻿@using MarketPlace.Data.Entities.SiteSettings
+@using MarketPlace.Application.EntitesExtensions
+@{
+    ViewData["Title"] = "صفحه اصلی";
+    var banners = ViewBag.banners as List<SiteBanner>;
+}
+<div class="row d-none d-sm-block">
+    @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_1))
+    {
+        @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_1))
+        {
+            <div class="col-12 mb-3">
+                <div class="banner">
+                    <a target="_blank" href="@banner.Url">
+                        <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="row mb-4">
+    <div class="col-lg-8 ml-lg-0 mb-3">
+
+        @await Component.InvokeAsync("HomeSlider")
+
+    </div>
+    <div class="col-lg-4">
+        <div class="row">
+            @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_2))
+            {
+                @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_2))
+                {
+                    <div class="@banner.ColSize">
+                        <div class="banner mb-3">
+                            <a target="_blank" href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+
+            @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_3))
+            {
+                @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_3))
+                {
+                    <div class="@banner.ColSize">
+                        <div class="banner">
+                            <a href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<div class="row align-items-center mb-4">
+    <div class="col-lg-4 order-2 order-lg-1">
+        <div class="row mt-4 mt-lg-0">
+            @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_4))
+            {
+                @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_4))
+                {
+                    <div class="@banner.ColSize">
+                        <div class="banner mb-4">
+                            <a target="_blank" href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_5))
+            {
+                @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_5))
+                {
+                    <div class="@banner.ColSize">
+                        <div class="banner mb-4">
+                            <a target="_blank" href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("ProductOffers")
+
+</div>
+
+@await Component.InvokeAsync("ProductsSlider")
+
+<div class="row mb-5">
+    @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_6))
+    {
+        @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_6))
+        {
+            <div class="@banner.ColSize">
+                <div class="banner mb-4">
+                    <a target="_blank" href="@banner.Url">
+                        <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="row mb-5">
+    @if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_7))
+    {
+        @foreach (var banner in banners.Where(b => b.BannerPlacement == BannerPlacement.Home_7))
+        {
+            <div class="@banner.ColSize">
+                <div class="banner mb-4">
+                    <a target="_blank" href="@banner.Url">
+                        <img src="@banner.GetBannerMainImageAddress()" alt="banner">
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@await Component.InvokeAsync("Products")

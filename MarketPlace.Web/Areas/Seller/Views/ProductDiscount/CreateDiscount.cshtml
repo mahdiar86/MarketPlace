@@ -1,0 +1,127 @@
+﻿@model MarketPlace.Data.DTOs.Discount.CreateProductDiscountDTO
+@{
+    ViewData["Title"] = "ثبت تخفیف جدید";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@section Styles
+{
+    <link rel="stylesheet" href="/lib/EasyAutocomplete/easy-autocomplete.min.css" />
+    <link rel="stylesheet" href="/lib/EasyAutocomplete/easy-autocomplete.themes.min.css" />
+    <link rel="stylesheet" href="/lib/date-picker/kamadatepicker.min.css" />
+}
+@section Script {
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/lib/date-picker/kamadatepicker.min.js"></script>
+    <script src="/lib/date-picker/kamadatepicker.holidays.js"></script> 
+    <script src="/lib/EasyAutocomplete/jquery.easy-autocomplete.min.js"></script>
+    <script>
+        var customOptions = {
+            placeholder: "روز / ماه / سال"
+            , twodigit: false
+            , closeAfterSelect: false
+            , nextButtonIcon: "fa fa-arrow-circle-right"
+            , previousButtonIcon: "fa fa-arrow-circle-left"
+            , buttonsColor: "blue"
+            , forceFarsiDigits: true
+            , markToday: true
+            , markHolidays: true
+            , highlightSelectedDay: true
+            , sync: true
+            , gotoToday: true
+        }
+        kamaDatepicker('ExpireDate', customOptions);
+
+        var options = {
+            url: function (phrase) {
+                return "/seller/products-autocomplete?productName=" + phrase;
+            },
+            getValue: function (element) {
+                return element.title;
+            },
+            list: {
+                match: {
+                    enabled: true
+                },
+                onSelectItemEvent: function () {
+                    var value = $("#ProductName").getSelectedItemData().id;
+
+                    $("#ProductId").val(value).trigger("change");
+                }
+            },
+            theme: "square"
+        };
+
+        $("#ProductName").easyAutocomplete(options);
+    </script>
+}
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("SellerSideBar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        @ViewData["Title"]
+                    </div>
+                    <section class="shadow-around p-3">
+                        <form method="post" asp-action="CreateDiscount" asp-controller="ProductDiscount" asp-area="Seller">
+                            <input type="hidden" asp-for="ProductId" />
+                            <div class="row">
+                                <div class="col-lg-7 mb-5">
+                                    <div class="text-sm text-muted mb-3">محصول موردنظر</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input type="text" id="ProductName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 mb-5">
+                                    <div class="text-sm text-muted mb-3">تاریخ انقضا</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input asp-for="ExpireDate" type="text" class="input-element">
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ExpireDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-7 mb-5">
+                                    <div class="text-sm text-muted mb-3">درصد تخفیف</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input asp-for="Percentage" class="input-element">
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Percentage" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-7 mb-5">
+                                    <div class="text-sm text-muted mb-3">تعداد تخفیف</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input asp-for="DiscountNumber" class="input-element">
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="DiscountNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-element-row text-right">
+                                        <button class="btn-element btn-success-element">
+                                            <i class="fad fa-user-edit"></i>
+                                            افزودن تخفیف جدید
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

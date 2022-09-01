@@ -1,0 +1,91 @@
+﻿@using MarketPlace.Web.PresentationExtensions
+@using MarketPlace.Application.Utils
+@using MarketPlace.Data.DTOs.Contacts
+@using MarketPlace.Data.Entities.Account
+@model MarketPlace.Data.DTOs.Contacts.TicketDetailDTO
+@{
+    ViewData["Title"] = Model.Ticket.Title;
+    User user = (User)ViewBag.User;
+}
+@section Script
+{
+    <script src="/js/ckeditor.js"></script>
+}
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("UserSidebar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        @ViewData["Title"]
+                    </div>
+                    <section class="shadow-around p-3">
+                        <div class="row mb-5">
+                            <div class="col-md-9">
+                                <partial name="_AnswerTicketPartial" model="new AnswerTicketDTO(){Id = Model.Ticket.Id}" />
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            @if (Model.TicketMessage != null && Model.TicketMessage.Any())
+                            {
+                                @foreach (var ticket in Model.TicketMessage)
+                                {
+                                    <div class="col-lg-9 mb-4">
+                                        <div class="shadow-around p-3 @(ticket.SenderId == Model.Ticket.OwnerId ? "" : "ticket-bg")">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <span class="font-weight-bold">@ticket.Sender.GetUserShowName()</span>
+                                            </div>
+                                            <div>
+                                                @Html.Raw(ticket.Text)
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <cite class="text-sm">@ticket.CreateDate.ToShamsi()</cite>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-01.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-02.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-03.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-04.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

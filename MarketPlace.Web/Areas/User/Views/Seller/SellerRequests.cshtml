@@ -1,0 +1,112 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@model MarketPlace.Data.DTOs.Seller.FilterSellerDTO
+@{
+    ViewData["Title"] = "لیست درخواست های فروشندگی";
+}
+@{
+    <script src="/js/custom.js"></script>
+    <link href="~/css/custom.css" rel="stylesheet" />
+}
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            @await Component.InvokeAsync("UserSidebar")
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        @ViewData["Title"]
+                    </div>
+                    <section class="shadow-around p-3">
+                        <div class="table-responsive">
+                            <form asp-area="User" asp-controller="Seller" method="get" asp-action="SellerRequests" id="filter-form">
+                                <input type="hidden" asp-for="PageId" />
+                                <input type="hidden" asp-for="Mobile" />
+                                <input type="hidden" asp-for="StorePhone" />
+                                <input type="hidden" asp-for="Address" />
+                            </form>
+                            @if (Model.Sellers != null && Model.Sellers.Any())
+                            {
+                                <table class="table">
+                                    <thead>
+                                        <tr class="seller-header">
+                                            <th>شناسه درخواست</th>
+                                            <th>نام فروشگاه</th>
+                                            <th>تلفن فروشگاه</th>
+                                            <th>شماره موبایل</th>
+                                            <th>تاریخ آخرین بروزرسانی</th>
+                                            <th>وضعیت</th>
+                                            <th>#</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var seller in Model.Sellers)
+                                        {
+                                            <tr>
+                                                <td>@seller.Id</td>
+                                                <td>@seller.StoreName</td>
+                                                <td>@seller.StorePhone</td>
+                                                <td>@seller.Mobile</td>
+                                                <td>@seller.LastUpdateDate.ToShamsi()</td>
+                                                <td><span class="custom-lable-2">@seller.StoreAcceptanceState.GetEnumName()</span></td>
+                                                <td class="text-center">
+                                                    <a asp-area="User" asp-controller="Seller" asp-action="EditSellerRequest" asp-route-id="@seller.Id" class="btn btn-sm btn-warning btn-element">ویرایش</a>
+                                                </td>
+                                                <td class="order-detail-link">
+                                                    <a asp-area="User" asp-controller="Seller" asp-action="EditSellerRequest" asp-route-id="@seller.Id">
+                                                        <i class="far fa-chevron-left"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="alert cutome-alert">درخواستی وجود ندارد </div>
+                            }
+                        </div>
+                    </section>
+
+                    <partial name="_PagingPartial" model="Model.GetCurrentPaging()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-01.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-02.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-03.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-04.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

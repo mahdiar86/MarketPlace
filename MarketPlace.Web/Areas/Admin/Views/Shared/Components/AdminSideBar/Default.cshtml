@@ -1,0 +1,72 @@
+﻿@using MarketPlace.Data.Entities.Account
+@using MarketPlace.Web.PresentationExtensions
+@{
+    var user = (User)ViewBag.user;
+}
+
+<!-- Left Sidebar -->
+<aside id="leftsidebar" class="sidebar">
+    <!-- Menu -->
+    <div class="menu">
+        <ul class="list">
+            <li>
+                <div class="sidebar-profile clearfix">
+                    <div class="profile-img">
+                        <img src="/Admin/images/usrbig.jpg" alt="profile">
+                    </div>
+                    <div class="profile-info">
+                        <h3>@user.GetUserShowName()</h3>
+                        <p>خوش آمدید !</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a asp-controller="Home" asp-action="Index" asp-area="" target="_blank">
+                    <span>صفحه اصلی</span>
+                </a>
+            </li>
+            @*<li class="header">-- درخواست های فروشندگی</li>*@
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon ti-email"></i>
+                    <span>مدیریت فروشندگان</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Admin" asp-controller="Seller" asp-action="SellerRequests">درخواست های فروشندگی</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon ti-email"></i>
+                    <span>مدیریت محصولات</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-area="Admin" asp-controller="Products" asp-action="Index">مدیریت محصولات</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon ti-email"></i>
+                    <span>ایمیل</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="pages/email/inbox.html">صندوق ورودی</a>
+                    </li>
+                    <li>
+                        <a href="pages/email/compose.html">نوشتن</a>
+                    </li>
+                    <li>
+                        <a href="pages/email/view-mail.html">خواندن ایمیل</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- #Menu -->
+    </div>
+</aside>
+<!-- #END# Left Sidebar -->

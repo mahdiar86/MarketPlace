@@ -1,0 +1,93 @@
+﻿@using MarketPlace.Data.Entities.Account
+@using MarketPlace.Application.Extensions
+@using MarketPlace.Web.PresentationExtensions
+@{
+    var user = ViewBag.user as User;
+}
+
+<div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 1026.75px;">
+    <div class="sidebar-widget">
+        <div class="banner mb-3">
+            <a href="#">
+                <img src="/images/banner/banner-profile-sidebar.jpg" class="box-shaow-unset has-border" alt="...">
+            </a>
+        </div>
+        <div class="profile-sidebar shadow-around">
+            <div class="d-flex align-items-center">
+                <div class="profile-avatar">
+                    <img src="/images/avatar/avatar.png" alt="avatar">
+                </div>
+                <div class="profile-info">
+                    <div class="d-block">
+                        <h6>
+                            <strong>
+                                @User.Identity.Name
+                            </strong>
+                        </h6>
+                    </div>
+                    <div class="d-block">
+                        <strong class="text-muted">@User.Identity.Name</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="user-options">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <span>کیف پول</span>
+                            <span>2,500,000 <span class="text-info font-weight-bold">تومان</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>همتا کلاب</span>
+                            <span>0 <span class="text-info font-weight-bold">امتیاز</span></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="user-menu">
+                <ul>
+                    <li>
+                        <a asp-controller="Ticket" asp-action="Index" asp-area="User">
+                            <i class="far fa-ticket-alt"></i>
+                            تیکت ها
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Ticket" asp-action="AddTicket" asp-area="User">
+                            <i class="far fa-ticket"></i>
+                            افزودن تیکت جدید
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Product" asp-action="Index" asp-area="Seller">
+                            <i class="fas fa-shopping-basket"></i>
+                            مدیریت محصولات
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="ProductDiscount" asp-action="FilterDiscounts" asp-area="Seller">
+                            <i class="fas fa-shopping-basket"></i>
+                            مدیریت کدهای تخفیف
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Product" asp-action="CreateProduct" asp-area="Seller">
+                            <i class="fas fa-shopping-cart"></i>
+                            افزودن محصول جدید
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Account" asp-action="LogOut">
+                            <i class="far fa-sign-in-alt"></i>
+                            خروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div><div class="resize-sensor" style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 347px; height: 1042px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div>
+</div>
+
+

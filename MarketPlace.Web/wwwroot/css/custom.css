@@ -1,0 +1,119 @@
+.profile-style {
+    max-height: 250px !important;
+    max-width: 250px !important;
+}
+
+.ticket-header {
+    color: white;
+    background: linear-gradient(to right,#8E2DE2,#4A00E0);
+}
+
+.seller-header {
+    color: white;
+    background: linear-gradient(to right,#ff00cc, #333399);
+}
+
+.cutome-alert {
+    color: white;
+    background: linear-gradient(to right,#667db6, #0082c8, #0082c8, #667db6);
+    border-radius: 5px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.custom-lable {
+    color: white !important;
+    background-color: #4A00E0 !important;
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+}
+
+.custom-lable-2 {
+    background: #1488cc;
+    color: white !important;
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+}
+
+.ticket-message {
+    font-size: 16px !important;
+    line-height: 27px;
+}
+
+.ticket-bg {
+    background: #F8F9FC;
+}
+
+.ck-content {
+    height: 280px;
+}
+
+.ck .ck-sticky-panel .ck-sticky-panel__content_sticky {
+    position: static !important;
+}
+
+.cerImg {
+    max-height: 250px;
+    max-width: 250px;
+}
+
+.custom-alert {
+    background: #204969;
+    box-shadow: 0 7px 20px #673ab660;
+    color: #fff;
+}
+
+.product-header {
+    background: #17223b;
+    color: #fff;
+}
+
+.btn-add-product {
+    color: #fff;
+    background: linear-gradient(to right,#8E2DE2,#4A00E0);
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 4px;
+}
+
+    .btn-add-product:hover {
+        transform: scale(1.03);
+        color: #fff;
+    }
+
+.custom-pointer {
+    cursor: pointer !important;
+}
+
+.add-color {
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add-color {
+    padding: 7px;
+    margin: 5px;
+    transition: all 0.3s ease-in-out;
+    background: linear-gradient(to right, #cb2d3e, #ef473a);
+    color: #fff;
+}
+
+.text-discount {
+    text-decoration: line-through;
+    color: #cb2d3e;
+    padding-bottom: 5px;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

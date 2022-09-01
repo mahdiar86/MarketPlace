@@ -1,0 +1,50 @@
+﻿@model MarketPlace.Data.DTOs.Account.ActivateMobileDTO
+@{
+    ViewData["Title"] = "فعال سازی تلفن همراه";
+}
+
+<div class="auth-wrapper">
+    <div class="auth-form shadow-around">
+        <div class="site-logo">
+            <a href="#">
+                <img src="/images/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="auth-form-title">
+            @ViewData["Title"]
+        </div>
+        <form asp-action="ActivateMobile" asp-controller="Account">
+            <div class="form-element-row">
+                <label for="phone-number" class="label-element">کد فعال سازی تلفن همراه</label>
+                <div class="form-element-with-icon">
+                    <input asp-for="MobileActiveCode" class="input-element" id="phone-number">
+                    <i class="fad fa-mobile-alt"></i>
+                </div>
+                <span asp-validation-for="MobileActiveCode" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Mobile"/>
+            <partial name="_CaptchaInput" />
+            <div class="form-element-row text-left">
+                <button class="btn-element btn-primary">
+                    <i class="fad fa-sign-in-alt"></i>
+                    @ViewData["Title"]
+                </button>
+            </div>
+
+        </form>
+        <div class="auth-form-footer">
+            <span>کاربر جدید هستید؟</span>
+            <a href="/Register" class="link--with-border-bottom">ثبت نام در فروشگاه ساز</a>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <partial name="_CaptchaScripts" />
+}
+
+
+
+

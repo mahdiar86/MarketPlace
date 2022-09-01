@@ -1,0 +1,183 @@
+﻿@using MarketPlace.Application.Extensions
+@using MarketPlace.Application.Utils
+@using MarketPlace.Data.DTOs.Seller
+@using Microsoft.EntityFrameworkCore
+@model MarketPlace.Data.DTOs.Seller.FilterSellerDTO
+@{
+    ViewData["Title"] = "درخواست های فروشندگی";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    @ViewData["Title"]
+                </h2>
+                @*<ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="#" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="#" onclick="return false;">اقدام</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="return false;">اقدامی دیگر</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="return false;">چیز دیگری اینجا</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>*@
+            </div>
+            <div class="body table-responsive">
+                <form asp-action="SellerRequests" id="filter-form" asp-controller="Seller" asp-area="Admin" method="get">
+                    <input type="hidden" asp-for="PageId" />
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" asp-for="StoreName" placeholder="جستجو بر اساس نام فروشگاه">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" asp-for="Mobile" placeholder="جستجو بر اساس شماره موبایل">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" asp-for="Address" placeholder="جستجو بر اساس مکان">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" asp-for="StorePhone" class="form-control" placeholder="جستجو بر اساس تلفن فروشگاه">
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-check form-check-radio">
+                                <label>
+                                    <input type="radio" value="@FilterSellerState.All" name="@(nameof(Model.State))" @(Model.State == FilterSellerState.All ? "checked" : "")>
+                                    <span>همه</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-check form-check-radio">
+                                <label>
+                                    <input type="radio" value="@FilterSellerState.UnderProgress" name="@(nameof(Model.State))" @(Model.State == FilterSellerState.UnderProgress ? "checked" : "")>
+                                    <span>درحال بررسی ها</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-check form-check-radio">
+                                <label>
+                                    <input type="radio" value="@FilterSellerState.Accepted" name="@(nameof(Model.State))" @(Model.State == FilterSellerState.Accepted ? "checked" : "")>
+                                    <span>تایید شده ها</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="form-check form-check-radio">
+                                <label>
+                                    <input type="radio" value="@FilterSellerState.Rejected" name="@(nameof(Model.State))" @(Model.State == FilterSellerState.Rejected ? "checked" : "")>
+                                    <span>رد شده ها</span>
+                                </label>
+                            </div>
+                        </div>*@
+                        
+                        @foreach (var item in Html.GetEnumSelectList<FilterSellerState>())
+                        {
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <div class="form-check form-check-radio">
+                                    <label>
+                                        <input type="radio" value="@item.Value" name="@(nameof(Model.State))" @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.State) ? "checked" : "")>
+                                        <span>@item.Text</span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-0">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <button type="submit" class="btn btn-block bg-pink waves-effect">
+                                        جستجو
+                                        <div class="waves-ripple " data-hold="1627107897335" data-scale="scale(12)" data-x="43.28125" data-y="25" style="top: 25px; left: 43.28125px; -webkit-transform: scale(12); -moz-transform: scale(12); -ms-transform: scale(12); -o-transform: scale(12); transform: scale(12); opacity: 1; -webkit-transition-duration: 750ms; -moz-transition-duration: 750ms; -o-transition-duration: 750ms; transition-duration: 750ms; -webkit-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); -moz-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); -o-transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940); transition-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                @if (Model.Sellers != null && Model.Sellers.Any())
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>نام فروشگاه</th>
+                                <th>شماره تلفن فروشگاه</th>
+                                <th>موبایل</th>
+                                <th>وضعیت</th>
+                                <th>زمان ثبت</th>
+                                <th>مکان</th>
+                                <th>دستورات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var seller in Model.Sellers)
+                            {
+                                <tr>
+                                    <td>@seller.Id</td>
+                                    <td>@seller.StoreName</td>
+                                    <td>@seller.StorePhone</td>
+                                    <td>@seller.Mobile</td>
+                                    <td><span class="label l-bg-purple shadow-style">@seller.StoreAcceptanceState.GetEnumName()</span></td>
+                                    <td>@seller.CreateDate.ToShamsi()</td>
+                                    <td>@seller.Address</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Seller" asp-action="AcceptSellerRequest" asp-route-requestId="@seller.Id" class="btn bg-deep-orange waves-effect">جزییات</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert bg-teal alert-dismissible rounded" role="alert">
+                        اطلاعاتی یافت نشد !
+                    </div>
+                }
+            </div>
+            <div class="row" style="align-items: center">
+
+                <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 تا 10 از 57 ورودی</div>
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                        <partial name="_AdminPagingPartial" model="Model.GetCurrentPaging()"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,94 @@
+﻿@using MarketPlace.Data.Entities.Products
+@using MarketPlace.Application.Utils
+@model List<MarketPlace.Data.Entities.Products.ProductGallery>
+@{
+    Product mainProduct = ViewBag.product as Product;
+    ViewData["Title"] = " گالری تصاویر  " + mainProduct.Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            @await Component.InvokeAsync("SellerSideBar")
+
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="col-12">
+                <div class="section-title mb-2">
+                    @ViewData["Title"]
+                </div>
+                <section class="shadow-around p-3">
+                    <a class="btn btn-add-product cursor-pointer" data-toggle="modal" data-target="#exampleModal">افزودن تصویر جدید</a>
+                    <div class="table-responsive">
+                        @if (Model.Any())
+                        {
+                            <table class="table">
+                                <thead>
+                                    <tr class="product-header">
+                                        <th>تصویر</th>
+                                        <th>اولیت</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var gallery in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img width="120" src="@(FilePath.ProductGalleryImageThumb + gallery.ImageName)" class="thumb" />
+                                            </td>
+                                            <td>
+                                                @gallery.DisplayPriority
+                                            </td>
+                                            <td class="order-detail-link" style="display: flex; flex-direction: column;">
+                                                <a asp-area="Seller" asp-controller="Product" asp-action="DeleteProductGallery" asp-route-id="@gallery.Id" >
+                                                    حذف
+                                                    <i class="far fa-chevron-left"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="alert cutome-alert">تصویری برای نمایش وجود ندارد , هم اکنون اضافه کنید !</div>
+                        }
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <input type="hidden" id="modalProductId" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    افزودن تصویر جدید به گالری
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert custom-alert">
+                    منظور از اولویت , اولویت نمایش تصویر در بخش گالری می باشد
+                </div>
+                <input type="hidden" id="GalleryProductId" value="@mainProduct.Id"/>
+                <input class="input-element" placeholder="اولویت" type="number" id="GalleryDisplayPriority"/>
+                <input type="file" id="GalleryImageName" name="GalleryImageName"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-primary" onclick="addGallery()">افزودن تصویر جدید به گالری</button>
+            </div>
+        </div>
+    </div>
+</div>

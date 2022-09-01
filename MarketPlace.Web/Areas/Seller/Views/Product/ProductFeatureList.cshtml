@@ -1,0 +1,22 @@
+﻿@model List<MarketPlace.Data.Entities.Products.ProductFeature>
+<table class="table" id="product_features_list">
+    <thead>
+    <tr class="ticket-header">
+        <th>عنوان ویژگی</th>
+        <th>مقدار ويژگی</th>
+        <th>#</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var feature in Model)
+    {
+        <tr>
+            <td>@feature.FeatureTitle</td>
+            <td>@feature.FeatureValue</td>
+            <td>
+                <button onclick="deleteFeature(@feature.Id)" class="btn-element btn-info-element btn-sm">حذف</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table> 

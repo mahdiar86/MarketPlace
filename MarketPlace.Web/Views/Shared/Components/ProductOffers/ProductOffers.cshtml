@@ -1,0 +1,76 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@model List<MarketPlace.Data.Entities.Products.ProductOffer>
+
+@if (Model.Any())
+{
+    <div class="col-lg-8 order-1 order-lg-2">
+        <div class="offer-slider-wrapper">
+            <div class="offer-slider-title">پیشنهاد شگفت انگیز</div>
+            <div class="row">
+                <div class="col-12 mb-1">
+                    <div class="swiper-container offer-slider">
+                        <div class="swiper-wrapper">
+                            @foreach (var product in Model)
+                            {
+                                <div class="swiper-slide">
+                                    <div class="row align-items-center pb-3">
+                                        <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                            <div class="product-title">
+                                                <a asp-controller="Product" asp-action="ProductDetail" asp-route-title="@product.Product.Title.FixTextForUrl()" asp-route-productId="@product.ProductId">
+                                                    @product.Product.Title
+                                                </a>
+                                            </div>
+                                            <div class="product-price">
+                                                <del>@product.Product.Price.ToString("#,0") تومان</del>
+                                                @product.Product.GetProductPrice().ToString("#,0") تومان
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-12 order-1 order-sm-2">
+                                            <div class="offer-slide-content">
+                                                <div class="product-thumbnail">
+                                                    <a asp-controller="Product" asp-action="ProductDetail" asp-route-title="@product.Product.Title.FixTextForUrl()" asp-route-productId="@product.ProductId">
+                                                        <img src="@FilePath.ProductImageOrigin@product.Product.ImageName"
+                                                     alt="item">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center pb-4">
+                <div class="col-lg-8 mt-2 mb-4 mb-lg-0">
+                    <div class="offer-slider-thumbs-wrapper">
+                        <div class="px-0 px-sm-5">
+                            <div class="swiper-container offer-slider-thumbs">
+                                <div class="swiper-wrapper">
+                                    @foreach (var productOffer in Model)
+                                    {
+                                        <div class="swiper-slide">
+                                            <img src="@FilePath.ProductImageThumb@productOffer.Product.ImageName">
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Add Pagination -->
+                            <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <!-- Add Arrows -->
+                    <div class="offer-slider-button-next"><i class="far fa-chevron-left"></i></div>
+                        <div class="offer-slider-button-prev"><i class="far fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                   @* <div class="d-flex justify-content-center">
+                        <div id="countdown--offer-slider"></div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,60 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Data.Entities.Store
+@model MarketPlace.Data.Entities.Store.Seller
+@{
+    ViewData["Title"] = "تایید درخواست فروشندگی";
+}
+
+<form method="post" asp-area="Admin" asp-controller="Seller" asp-action="AcceptSellerRequest">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-lg-12 col-md-12 mb-2">
+            <img src="@(FilePath.UploadCertificateOrigin+'/'+Model.BirthCertificateScan)" class="thumbnail" />
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3">
+            <a class="btn btn-warning" download="" href="@(FilePath.UploadCertificateOrigin+'/'+Model.BirthCertificateScan)">دانلود تصویر</a>
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3">
+            <p class="text-dark">نام فروشگاه : @Model.StoreName</p>
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3">
+            <p class="text-dark">شماره تلفن فروشگاه : @Model.StorePhone</p>
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3">
+            <p class="text-dark">شماره موبایل : @Model.Mobile</p>
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3">
+            <p class="text-dark">کد ملی : @Model.NationalCode</p>
+        </div>
+
+        <div class="col-lg-12 col-md-12 mb-3 text-dark">
+            @Model.Description
+        </div>
+
+        <div class="col-lg-12 col-md-12 mt-2 text-dark">
+            @Html.Raw(Model.AdminDescription)
+        </div>
+
+        @if (Model.StoreAcceptanceState != StoreAcceptanceState.Accepted)
+        {
+            <div class="col-lg-12 col-md-12 mb-4 text-dark">
+                <button type="submit" class="btn-hover btn-border-radius color-9">تایید درخواست </button>
+            </div>
+        }
+        @if (Model.StoreAcceptanceState != StoreAcceptanceState.Rejected)
+        {
+            <div class="col-lg-12 col-md-12 mb-4 mt-1 text-dark">
+                <a asp-area="Admin" asp-controller="Seller" asp-action="RejectSellerRequest" asp-route-requestId="@Model.Id" class="btn bg-purple waves-effect">عدم تایید درخواست </a>
+            </div>
+        }
+        <div class="col-lg-12 mt-1 col-md-12 text-dark">
+            <a asp-action="SellerRequests">بازگشت به لیست</a>
+        </div>
+    </div>
+</form>
+

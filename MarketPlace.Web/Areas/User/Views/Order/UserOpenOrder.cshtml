@@ -1,0 +1,165 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@model MarketPlace.Data.DTOs.Orders.UserOpenOrderDTO
+@{
+    ViewData["Title"] = "سبد خرید";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    long totalPrice = 0;
+    if (Model.Details != null && Model.Details.Any())
+    {
+        foreach (var orderDetail in Model.Details)
+        {
+            totalPrice += orderDetail.Count * orderDetail.Product.Price;
+        }
+    }
+
+    long discountPrice = 0;
+    if (Model.Details != null && Model.Details.Any())
+    {
+        foreach (var orderDetail in Model.Details)
+        {
+            discountPrice += ((orderDetail.Product.Price * orderDetail.Count) - (orderDetail.Product.GetProductPrice() * orderDetail.Count));
+        }
+    }
+
+    long totalPriceWithDiscount = 0;
+    if (Model.Details != null && Model.Details.Any())
+    {
+        foreach (var orderDetail in Model.Details)
+        {
+            totalPriceWithDiscount += orderDetail.Product.GetProductPrice() * orderDetail.Count;
+        }
+    }
+
+    //float discountPercent = 0;
+
+    //if(totalPrice != 0) 
+    //    discountPercent = Math.Ceiling((100 - (discountPrice / totalPrice * 100)));
+
+}
+<div id="main-order-wrapper">
+    <div class="row mb-4">
+    <div class="col-xl-9 col-lg-8 col-md-8 mb-md-0 mb-3">
+        <div class="checkout-section shadow-around">
+            <div class="checkout-step">
+                <ul>
+                    <li class="active"><span>سبد خرید</span></li>
+                    <li>
+                        <span>نحوه ارسال و پرداخت</span>
+                    </li>
+                    <li>
+                        <span>اتمام خرید و ارسال</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="checkout-section-content">
+                <div class="cart-items">
+                    @if (Model.Details.Any() && Model.Details != null)
+                    {
+                        @foreach (var detail in Model.Details)
+                        {
+                            <div class="cart-item py-4 px-3" line-order-id="@detail.DetailId">
+                                <div class="item-thumbnail">
+                                    <a asp-controller="Product" asp-action="ProductDetail" asp-route-productId="@detail.Product.Id" asp-route-title="@detail.Product.Title.FixTitleForUrl()">
+                                        <img src="@(FilePath.ProductImageThumb + detail.Product.ImageName)" alt="@detail.Product.Title">
+                                    </a>
+                                </div>
+                                <div class="item-info flex-grow-1">
+                                    <div class="item-title">
+                                        <h2>
+                                            <a asp-controller="Product" asp-action="ProductDetail" asp-route-productId="@detail.Product.Id" asp-route-title="@detail.Product.Title.FixTitleForUrl()">@detail.Product.Title</a>
+                                        </h2>
+                                    </div>
+                                    <div class="item-detail">
+                                        <ul>
+                                            <li>
+                                                <i class="far fa-store-alt text-muted"></i>
+                                                <span>فروشگاه : @detail.Product.Seller.StoreName</span>
+                                            </li>
+                                            <li>
+                                                <i class="far fa-clipboard-check text-primary"></i>
+                                                <span>موجود در انبار</span>
+                                            </li>
+                                        </ul>
+                                        <div class="item-quantity--item-price">
+                                            <div class="item-quantity">
+                                                <div class="num-block">
+                                                    <div class="num-in">
+                                                        <span class="plus"></span>
+                                                        <input type="text" class="in-num" value="@detail.Count" onchange="changeOpenOrderCount(event, @detail.DetailId)">
+                                                        <span class="minus dis"></span>
+                                                    </div>
+                                                </div>
+                                                <button class="item-remove-btn mr-3" onclick="removeProductFromOrder(@detail.DetailId)">
+                                                    <i class="far fa-trash-alt"></i>
+                                                    حذف
+                                                </button>
+                                            </div>
+                                            @if (detail.Product.DiscountPercent > 0)
+                                            {
+                                                <div class="item-price">
+                                                    <div class="text-danger">
+                                                        <del>@detail.Product.Price.ToString("#,0")</del>
+                                                    </div>
+                                                    <div class="">
+                                                        @detail.Product.GetProductPrice().ToString("#,0") <span class="text-sm mr-1">تومان</span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="item-price">
+                                                    @detail.Product.Price.ToString("#,0") <span class="text-sm mr-1">تومان</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-4 col-md-4">
+        <div class="shadow-around pt-3">
+            <div class="d-flex justify-content-between px-3 py-2">
+                <span class="text-muted">قیمت کالاها (@Model.Details.Count)</span>
+                <span class="text-muted">
+                    @totalPrice.ToString("#,0")
+                    <span class="text-sm">تومان</span>
+                </span>
+            </div>
+            <div class="d-flex justify-content-between px-3 py-2">
+                <span class="text-muted">تخفیف کالاها</span>
+                <span class="text-danger">
+                    @*(@discountPercent٪)*@
+                    @discountPrice.ToString("#,0")
+                    <span class="text-sm">تومان</span>
+                </span>
+            </div>
+            @*<hr>
+            <div class="d-flex justify-content-between px-3 py-2">
+                <span class="font-weight-bold">جمع</span>
+                <span class="font-weight-bold">
+                    @totalPrice.ToString("#,0")
+                    <span class="text-sm">تومان</span>
+                </span>
+            </div>*@
+            <hr>
+            <div class="d-flex justify-content-between px-3 py-2">
+                <span class="font-weight-bold">مبلغ قابل پرداخت</span>
+                <span class="font-weight-bold">
+                    @totalPriceWithDiscount.ToString("#,0")
+                    <span class="text-sm">تومان</span>
+                </span>
+            </div>
+            <div class="d-flex px-3 py-4">
+                <a asp-area="User" asp-controller="Order" asp-action="PayUserOrderPrice" class="btn btn-danger btn-block py-2">پرداخت</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,124 @@
+﻿@model MarketPlace.Data.DTOs.Seller.EditRequestSellerDTO
+@{
+    ViewData["Title"] = "ویرایش درخواست فروشندگی";
+}
+
+<div class="container" style="transform: none;">
+    <div class="row mb-5" style="transform: none;">
+        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 sticky-sidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            @await Component.InvokeAsync("UserSidebar")
+        </div>
+        <div class="col-lg-9 col-md-8">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="section-title mb-2">
+                        @ViewData["Title"]
+                    </div>
+                    <section class="shadow-around p-3">
+                        <form method="post" asp-action="EditSellerRequest" asp-controller="Seller" asp-area="User" enctype="multipart/form-data">
+                            <div class="row">
+                                <input type="hidden" asp-for="Id"/>
+                                <div class="col-lg-6 mb-5">
+                                    <div class="text-sm text-muted mb-3">نام فروشگاه</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input class="input-element" asp-for="StoreName">
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="StoreName"></span>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <div class="text-sm text-muted mb-3">شماره موبایل</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input class="input-element" asp-for="Mobile">
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="Mobile"></span>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <div class="text-sm text-muted mb-3">شماره تلفن فروشگاه</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <input class="input-element" asp-for="StorePhone">
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="StorePhone"></span>
+                                </div>
+
+                                <div class="col-lg-9 mb-5">
+                                    <div class="text-sm text-muted mb-3">آدرس فروشگاه</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <textarea class="input-element" rows="4" asp-for="Address"></textarea>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="Address"></span>
+                                </div>
+
+                                <div class="col-lg-9 mb-5">
+                                    <div class="text-sm text-muted mb-3">توضیحات فروشگاه (بخش ادمین)</div>
+                                    <div class="text-dark font-weight-bold">
+                                        <div class="form-element-row mb-0">
+                                            <textarea class="input-element" ckeditor="4" asp-for="AdminDescription"></textarea>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="AdminDescription"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-element-row text-right">
+                                        <button class="btn-element btn-info-element">
+                                            <i class="fad fa-user-edit"></i>
+                                           ویرایش اطلاعات
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-01.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-02.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-03.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-lg-0 mb-3">
+            <div class="banner">
+                <a href="#">
+                    <img src="/images/banner/banner-sm-04.jpg" alt="banner">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Script {
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+

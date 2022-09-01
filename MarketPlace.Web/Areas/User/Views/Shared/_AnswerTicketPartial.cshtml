@@ -1,0 +1,12 @@
+﻿@model MarketPlace.Data.DTOs.Contacts.AnswerTicketDTO
+
+<form method="post" asp-area="User" asp-controller="Ticket" asp-action="AnswerTicket">
+    <input type="hidden" asp-for="Id"/>
+    <textarea asp-for="Text" ckeditor="3"></textarea>
+    <div class="form-element-row mt-2">
+        <button class="btn-element btn-info-element">
+            <i class="fa fa-send-backward"></i>
+            افزودن پاسخ جدید
+        </button>
+    </div>
+</form>

@@ -1,0 +1,98 @@
+﻿@using MarketPlace.Application.Utils
+@using MarketPlace.Application.Extensions
+@model MarketPlace.Data.Entities.ProductOrder.Order
+@{
+    long totalPrice = 0;
+    if (Model.OrderDetails != null && Model.OrderDetails.Any())
+    {
+        foreach (var orderDetail in Model.OrderDetails)
+        {
+            totalPrice += orderDetail.Count * orderDetail.Product.Price;
+        }
+    }
+
+    long discountPrice = 0;
+    if (Model.OrderDetails != null && Model.OrderDetails.Any())
+    {
+        foreach (var orderDetail in Model.OrderDetails)
+        {
+            discountPrice += ((orderDetail.Product.Price * orderDetail.Count) - (orderDetail.Product.GetProductPrice() * orderDetail.Count));
+        }
+    }
+
+    long totalPriceWithDiscount = 0;
+    if (Model.OrderDetails != null && Model.OrderDetails.Any())
+    {
+        foreach (var orderDetail in Model.OrderDetails)
+        {
+            totalPriceWithDiscount += orderDetail.Product.GetProductPrice() * orderDetail.Count;
+        }
+    }
+}
+
+<div class="user-item cart-list">
+    <a href="#">
+        <i class="fal fa-shopping-basket"></i>
+        <span class="bag-items-number">
+            @if (Model.OrderDetails != null)
+            {
+                @Model.OrderDetails.Count
+            }
+        </span>
+    </a>
+    <ul>
+        <li class="cart-items">
+            <ul class="do-nice-scroll">
+                @if (Model.OrderDetails.Any())
+                {
+                    @foreach (var orderDetail in Model.OrderDetails)
+                    {
+                        <li class="cart-item">
+                            <span class="d-flex align-items-center mb-2">
+                                <a href="#">
+                                    <img src="@(FilePath.ProductImageThumb + orderDetail.Product.ImageName)" alt="@orderDetail.Product.Title">
+                                </a>
+                                <span>
+                                    <a href="#">
+                                        <span class="title-item">@orderDetail.Product.Title</span>
+                                    </a>
+                                    <span class="color d-flex align-items-center">
+                                        تعداد : 
+                                        <span class="text-center">@orderDetail.Count</span>
+                                    </span>
+                                </span>
+                            </span>
+                            @if (orderDetail.Product.DiscountPercent > 0)
+                            {
+                                <span class="price text-danger"><del>@orderDetail.Product.Price.ToString("#,0")</del></span>
+                                <span class="price">@(orderDetail.Product.GetProductPrice().ToString("#,0")) تومان</span>
+                            }
+                            else
+                            {
+                                <span class="price">@orderDetail.Product.Price.ToString("#,0")تومان</span>
+                            }
+                            <button class="remove-item">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+        @if (Model.OrderDetails.Any())
+        {
+            <li class="cart-footer">
+                <span class="d-block text-center mb-3">
+                    مبلغ کل:
+                    <span class="total">@totalPrice تومان</span>
+                </span>
+                <span class="d-block text-center px-2">
+                    <a asp-area="User" asp-controller="Order" asp-action="UserOpenOrder" class="btn-cart">
+                        مشاهده سبد خرید
+                        <i class="mi mi-ShoppingCart"></i>
+                    </a>
+                </span>
+            </li>
+        }
+    </ul>
+</div>
