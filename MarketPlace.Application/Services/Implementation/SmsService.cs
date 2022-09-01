@@ -10,7 +10,7 @@ namespace MarketPlace.Application.Services.Implementation
 {
     public class SmsService : ISmsService
     {
-        private string apikey = "3759514469616F49336E454D537830484156754B6361704547523271547A56644B4D35513479392B53346B3D";
+        private string apikey = "0000000000000011111111111111122222222222222222333333333444444444444";
 
         public async Task SendRecoveryPasswordSms(string text, string sendTo)
         {
